@@ -8,54 +8,63 @@ from PIL import Image
 class Panel(wx.Panel):
     def __init__(self, parent, *args, **kwargs):
         wx.Panel.__init__(self, parent, *args, **kwargs)
-        main_sizer = wx.BoxSizer(wx.VERTICAL)
-        
-        # Row 1 : 'Source:', dynamic dir label, select button
-        r1_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        label_source = wx.StaticText(self, label='Source:')
-        self.dyn_label_source = wx.StaticText(self, label='')
-        self.source_button = wx.Button(self, label='Select')
-        self.source_button.Bind(wx.EVT_BUTTON, self._on_select)
-        r1_sizer.AddMany([(label_source, 0, wx.ALL, 5),
-                          (self.dyn_label_source, 0, wx.ALL, 5),
-                          (self.source_button, 0, wx.ALL, 5)])
-        
-        # Row 2 : combobox, arrow, combobox
-        r2_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.choices = ['.png', '.jpg', '.webp', '.bmp', '.pdf']
-        self.left_cb = wx.ComboBox(self, size=(80,-1), 
-                                   choices=self.choices)
-        label_to = wx.StaticText(self, label='to')
-        self.right_cb = wx.ComboBox(self, size=(80,-1), 
-                                    choices=self.choices)
-        r2_sizer.AddMany([(self.left_cb, 0 , wx.ALL, 5),
-                          (label_to, 0, wx.ALIGN_CENTRE|wx.ALL, 5),
-                          (self.right_cb, 0, wx.ALL, 5)])
         
-        # Row 3 : 'Output location:', dynamic dir label, change button
-        r3_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        label_out = wx.StaticText(self, label='Output location:')
+        main_sizer = wx.BoxSizer(wx.VERTICAL)
+        column_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        
+        # Col 1 : 'Source:', left combobox, 'Output location'
+        c1_sizer = wx.BoxSizer(wx.VERTICAL)
+        label_source = wx.StaticText(self, label='Source:') 
+        label_out = wx.StaticText(self, label='Output location:') 
+        c1_sizer.Add(label_source, 0, wx.ALL|wx.ALIGN_LEFT, 5)
+        c1_sizer.AddStretchSpacer()
+        c1_sizer.Add(label_out, 0, wx.ALL|wx.ALIGN_LEFT, 5)
+        
+        # Col 2 : dynamic src text, 'to', dynamic output location text
+        c2_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.dyn_label_source = wx.StaticText(self, label='')  
+        
+        type_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.left_cb = wx.ComboBox(self, size=(80,-1), 
+                                   choices=self.choices)  
+        label_to = wx.StaticText(self, label='to')        
+        self.right_cb = wx.ComboBox(self, size=(80,-1), 
+                                    choices=self.choices)   
+        type_sizer.AddMany([(self.left_cb, 1, wx.ALL|wx.CENTRE, 5),
+                            (label_to, 0, wx.ALL|wx.CENTRE, 5),
+                            (self.right_cb, 1, wx.ALL|wx.CENTRE, 5)])
+        
         self.dyn_label_out = wx.StaticText(self, label='')
+        c2_sizer.AddMany([(self.dyn_label_source, 0, wx.ALL|wx.ALIGN_LEFT, 5),
+                          (type_sizer, 0, wx.ALL|wx.CENTRE, 5),
+                          (self.dyn_label_out, 0, wx.ALL|wx.ALIGN_RIGHT, 5)])
+        
+        # Col  3 : select button, right combobox, change button
+        c3_sizer = wx.BoxSizer(wx.VERTICAL)
+        self.select_button = wx.Button(self, label='Select')
+        self.select_button.Bind(wx.EVT_BUTTON, self._on_select) 
         self.change_button = wx.Button(self, label='Change')
         self.change_button.Bind(wx.EVT_BUTTON, self._on_change)
-        r3_sizer.AddMany([(label_out, 0, wx.ALL, 5),
-                          (self.dyn_label_out, 0, wx.ALL, 5),
-                          (self.change_button, 0, wx.ALL, 5)])        
+        c3_sizer.Add(self.select_button, 0, wx.ALL|wx.ALIGN_RIGHT, 5)
+        c3_sizer.AddStretchSpacer()
+        c3_sizer.Add(self.change_button, 0, wx.ALL|wx.ALIGN_RIGHT, 5)
         
-        # Row 4 : convert button, open output location button
-        r4_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        # bottom : convert button, open output location button
+        bottom_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.convert_button = wx.Button(self, label='Convert')
         self.open_button = wx.Button(self, label='Open output location')
         self.convert_button.Bind(wx.EVT_BUTTON, self._on_convert)
         self.open_button.Bind(wx.EVT_BUTTON, self._on_open)
-        r4_sizer.AddMany([(self.convert_button, 0, wx.ALL, 5),
-                          (self.open_button, 0, wx.ALL, 5)])
+        bottom_sizer.AddMany([(self.convert_button, 0, wx.ALL|wx.EXPAND, 5),
+                              (self.open_button, 0, wx.ALL|wx.EXPAND, 5)])
         
         # Top level sizing
-        main_sizer.AddMany([(r1_sizer, 0, wx.ALIGN_CENTRE, 5),
-                            (r2_sizer, 0, wx.ALIGN_CENTRE, 5),
-                            (r3_sizer, 0, wx.ALIGN_CENTRE, 5),
-                            (r4_sizer, 0, wx.ALIGN_CENTRE, 5)])
+        column_sizer.AddMany([(c1_sizer, 1, wx.ALL|wx.EXPAND, 5),
+                              (c2_sizer, 1, wx.ALL|wx.EXPAND, 5),
+                              (c3_sizer, 1, wx.ALL|wx.EXPAND, 5)])
+        main_sizer.AddMany([(column_sizer, 0, wx.ALL|wx.EXPAND, 5),
+                            (bottom_sizer, 0, wx.ALL|wx.CENTRE, 5)])
         self.SetSizer(main_sizer)
     
     
@@ -73,8 +82,9 @@ class Panel(wx.Panel):
 
 
 class Frame(wx.Frame):
-    def __init__(self, parent=None, size=(400,300), pos=(100,100)):
-        wx.Frame.__init__(self, parent=parent, size=size, pos=pos)
+    def __init__(self, parent=None, size=(550,220), 
+                 pos=(100,100), title='FileTypeConverter'):
+        wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
         Panel(self)
         self.SetAutoLayout(False)
         self.Show()
