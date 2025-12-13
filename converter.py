@@ -12,6 +12,13 @@ class Panel(wx.Panel):
         
         # Row 1 : 'Source:', dynamic dir label, select button
         r1_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        label_source = wx.StaticText(self, label='Source:')
+        self.dyn_label_source = wx.StaticText(self, label='')
+        self.source_button = wx.Button(self, label='Select')
+        self.source_button.Bind(wx.EVT_BUTTON, self._on_select_source)
+        r1_sizer.AddMany([(label_source, 0, wx.ALL, 5),
+                          (self.dyn_label_source, 0, wx.ALL, 5),
+                          (self.source_button, 0, wx.ALL, 5)])
         
         # Row 2 : combobox, arrow, combobox
         r2_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -27,6 +34,10 @@ class Panel(wx.Panel):
                             (r3_sizer, 0, wx.ALIGN_CENTRE, 5),
                             (r4_sizer, 0, wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
+    
+    
+    def _on_select_source(self, event):
+        print('select source button pressed')
 
 
 class Frame(wx.Frame):
