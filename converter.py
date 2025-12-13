@@ -22,6 +22,15 @@ class Panel(wx.Panel):
         
         # Row 2 : combobox, arrow, combobox
         r2_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.choices = ['.png', '.jpg', '.webp', '.bmp', '.pdf']
+        self.left_cb = wx.ComboBox(self, size=(80,-1), 
+                                   choices=self.choices)
+        label_to = wx.StaticText(self, label='to')
+        self.right_cb = wx.ComboBox(self, size=(80,-1), 
+                                    choices=self.choices)
+        r2_sizer.AddMany([(self.left_cb, 0 , wx.ALL, 5),
+                          (label_to, 0, wx.ALIGN_CENTRE|wx.ALL, 5),
+                          (self.right_cb, 0, wx.ALL, 5)])
         
         # Row 3 : 'Output location:', dynamic dir label, change button
         r3_sizer = wx.BoxSizer(wx.HORIZONTAL)
