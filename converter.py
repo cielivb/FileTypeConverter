@@ -26,7 +26,7 @@ class Panel(wx.Panel):
         row1_sizer = wx.BoxSizer(wx.HORIZONTAL)
         file_label = wx.StaticText(self, label='File:')
         self.dyn_file_label = wx.StaticText(self, label='Choose file to convert')
-        self.choose_file_button = wx.Button(self, label='Choose', id=1)
+        self.choose_file_button = wx.Button(self, label='Choose')
         row1_sizer.AddMany([(file_label, 1, wx.ALL|wx.CENTRE, 5),
                             (self.dyn_file_label, 6, wx.ALL|wx.CENTRE, 5),
                             (self.choose_file_button, 1, wx.ALL|wx.CENTRE, 5)])
@@ -35,7 +35,7 @@ class Panel(wx.Panel):
         row2_sizer = wx.BoxSizer(wx.HORIZONTAL)
         dest_label = wx.StaticText(self, label='Destination:')
         self.dyn_dest_label = wx.StaticText(self, label='Same as file to convert')
-        self.choose_dest_button = wx.Button(self, label='Choose', id=2)
+        self.choose_dest_button = wx.Button(self, label='Choose')
         row2_sizer.AddMany([(dest_label, 1, wx.ALL|wx.CENTRE, 5),
                             (self.dyn_dest_label, 6, wx.ALL|wx.CENTRE, 5),
                             (self.choose_dest_button, 1, wx.ALL|wx.CENTRE, 5)])
@@ -44,8 +44,8 @@ class Panel(wx.Panel):
         row3_sizer = wx.BoxSizer(wx.HORIZONTAL)
         to_label = wx.StaticText(self, label='Convert to:')
         self.combobox = wx.ComboBox(self, size=(80,-1), choices=self.choices)
-        self.convert_button = wx.Button(self, label='Convert', id=3)
-        self.open_dir_button = wx.Button(self, label='Open Directory', id=4)
+        self.convert_button = wx.Button(self, label='Convert')
+        self.open_dir_button = wx.Button(self, label='Open Directory')
         row3_sizer.AddMany([(to_label, 0, wx.ALL|wx.CENTRE, 5),
                             (self.combobox, 0, wx.ALL|wx.CENTRE, 5),
                             (self.convert_button, 0, wx.ALL|wx.CENTRE, 5),
@@ -59,9 +59,13 @@ class Panel(wx.Panel):
         
         # Set Bindings --------------------------------------------
         
+        self.choose_file_button.Bind(wx.EVT_BUTTON, self._on_choose_source)
+        self.choose_dest_button.Bind(wx.EVT_BUTTON, self._on_choose_dest)
+        self.convert_button.Bind(wx.EVT_BUTTON, self._on_convert)
+        self.open_dir_button.Bind(wx.EVT_BUTTON, self._on_open_dir)
     
     
-    def _on_select(self, event):
+    def _on_choose_source(self, event):
         """ Get and store path to source file """
         dlg = wx.FileDialog(self, 'Choose source file', self.source_path,
                             "", "*.*", wx.FD_OPEN)
@@ -72,7 +76,7 @@ class Panel(wx.Panel):
         self.dyn_label_source.SetLabel(self.source_path)
 
 
-    def _on_change(self, event):
+    def _on_choose_dest(self, event):
         """ Get and store path to output directory """
         dlg = wx.DirDialog(self, 'Choose output directory', self.source_path,
                            wx.DD_DIR_MUST_EXIST)
@@ -85,7 +89,7 @@ class Panel(wx.Panel):
         print('on convert button pressed')
 
 
-    def _on_open(self, event):
+    def _on_open_dir(self, event):
         print('open output location button pressed')
 
 
