@@ -55,11 +55,12 @@ class Panel(wx.Panel):
                             (self.convert_button, 0, wx.ALL|wx.CENTRE, 5),
                             (self.open_dir_button, 0, wx.ALL|wx.CENTRE, 5)])
         
-        # Top-level layout        
+        # Main sizer layout        
         main_sizer.AddMany([(self.row1_sizer, 1, wx.ALL|wx.EXPAND, 5),
                             (self.row2_sizer, 1, wx.ALL|wx.EXPAND, 5),
                             (row3_sizer, 1, wx.ALL|wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
+        
         
         # Set Bindings --------------------------------------------
         
@@ -101,11 +102,16 @@ class Panel(wx.Panel):
 
 
 class Frame(wx.Frame):
-    def __init__(self, parent=None, size=(550,220), 
+    def __init__(self, parent=None, size=(400,200), 
                  pos=(100,100), title='FileTypeConverter'):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
         Panel(self)
+        
+        self.CreateStatusBar()
+        self.SetStatusText('Please choose a file to convert.')  
+        
         self.SetAutoLayout(False)
+        self.SetMinSize((400,200))
         self.Show()
 
 
