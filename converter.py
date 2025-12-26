@@ -34,7 +34,7 @@ class Panel(wx.Panel):
         # Col 2 : dynamic src text, 'to', dynamic output location text
         c2_sizer = wx.BoxSizer(wx.VERTICAL)
         self.dyn_label_source = wx.StaticText(self, 
-                                              label='Choose file to convert')  
+                                              label='Choose file to convert')
 
         type_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.left_cb = wx.ComboBox(self, size=(80,-1), 
@@ -48,11 +48,11 @@ class Panel(wx.Panel):
         
         self.dyn_label_out = wx.StaticText(self, label='Same directory as input file')
         c2_sizer.AddMany([(self.dyn_label_source, 0, 
-                           wx.ALL|wx.ALIGN_CENTRE, 5),
+                           wx.ALL|wx.ALIGN_LEFT, 5),
                           (type_sizer, 0, 
                            wx.ALL|wx.CENTRE, 5),
                           (self.dyn_label_out, 0, 
-                           wx.ALL|wx.ALIGN_CENTRE, 5)])
+                           wx.ALL|wx.ALIGN_LEFT, 5)])
         
         # Col  3 : select button, right combobox, change button
         c3_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -87,25 +87,22 @@ class Panel(wx.Panel):
     
     def _on_select(self, event):
         """ Get and store path to source file """
-        print('select source button pressed')
         dlg = wx.FileDialog(self, 'Choose source file', self.source_path,
                             "", "*.*", wx.FD_OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetFilename()
             dirname = dlg.GetDirectory()
             self.source_path = os.path.join(dirname, filename)
-        print('source path chosen:', self.source_path)
+        self.dyn_label_source.SetLabel(self.source_path)
 
 
     def _on_change(self, event):
         """ Get and store path to output directory """
-        print('change button pressed')
         dlg = wx.DirDialog(self, 'Choose output directory', self.source_path,
                            wx.DD_DIR_MUST_EXIST)
         if dlg.ShowModal() == wx.ID_OK:
             self.out_path = dlg.GetPath()
-        print('output path chosen:', self.out_path)
-                            
+        self.dyn_label_out.SetLabel(self.out_path)
 
 
     def _on_convert(self, event):
