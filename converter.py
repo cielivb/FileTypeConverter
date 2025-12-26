@@ -23,22 +23,26 @@ class Panel(wx.Panel):
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         
         # Row 1 : 'File:', dynamic text, Choose button
-        row1_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.row1_sizer = wx.BoxSizer(wx.HORIZONTAL)
         file_label = wx.StaticText(self, label='File:')
-        self.dyn_file_label = wx.StaticText(self, label='Choose file to convert')
+        self.dyn_file_label = wx.StaticText(self, label='Choose file to convert',
+                                            style=wx.ST_ELLIPSIZE_START|
+                                            wx.ALIGN_RIGHT)
         self.choose_file_button = wx.Button(self, label='Choose')
-        row1_sizer.AddMany([(file_label, 1, wx.ALL|wx.CENTRE, 5),
-                            (self.dyn_file_label, 6, wx.ALL|wx.CENTRE, 5),
-                            (self.choose_file_button, 1, wx.ALL|wx.CENTRE, 5)])
+        self.row1_sizer.AddMany([(file_label, 0, wx.ALL|wx.CENTRE, 5),
+                                 (self.dyn_file_label, 1, wx.ALL|wx.CENTRE, 5),
+                                 (self.choose_file_button, 0, wx.ALL|wx.CENTRE, 5)])
         
         # Row 2 : 'Destination:', dynamic text, Choose button
-        row2_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.row2_sizer = wx.BoxSizer(wx.HORIZONTAL)
         dest_label = wx.StaticText(self, label='Destination:')
-        self.dyn_dest_label = wx.StaticText(self, label='Same as file to convert')
+        self.dyn_dest_label = wx.StaticText(self, label='Same as file to convert',
+                                            style=wx.ST_ELLIPSIZE_START|
+                                            wx.ALIGN_RIGHT)
         self.choose_dest_button = wx.Button(self, label='Choose')
-        row2_sizer.AddMany([(dest_label, 1, wx.ALL|wx.CENTRE, 5),
-                            (self.dyn_dest_label, 6, wx.ALL|wx.CENTRE, 5),
-                            (self.choose_dest_button, 1, wx.ALL|wx.CENTRE, 5)])
+        self.row2_sizer.AddMany([(dest_label, 0, wx.ALL|wx.CENTRE, 5),
+                                 (self.dyn_dest_label, 1, wx.ALL|wx.CENTRE, 5),
+                                 (self.choose_dest_button, 0, wx.ALL|wx.CENTRE, 5)])
         
         # Row 3 : To, combobox, Convert Button, Open Directory button
         row3_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -52,8 +56,8 @@ class Panel(wx.Panel):
                             (self.open_dir_button, 0, wx.ALL|wx.CENTRE, 5)])
         
         # Top-level layout        
-        main_sizer.AddMany([(row1_sizer, 1, wx.ALL|wx.EXPAND, 5),
-                            (row2_sizer, 1, wx.ALL|wx.EXPAND, 5),
+        main_sizer.AddMany([(self.row1_sizer, 1, wx.ALL|wx.EXPAND, 5),
+                            (self.row2_sizer, 1, wx.ALL|wx.EXPAND, 5),
                             (row3_sizer, 1, wx.ALL|wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
         
@@ -74,6 +78,7 @@ class Panel(wx.Panel):
             dirname = dlg.GetDirectory()
             self.source_path = os.path.join(dirname, filename)
         self.dyn_file_label.SetLabel(self.source_path)
+        self.row1_sizer.Layout()
 
 
     def _on_choose_dest(self, event):
