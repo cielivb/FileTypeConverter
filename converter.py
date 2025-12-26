@@ -3,7 +3,7 @@
 import wx
 from PIL import Image
 import os
-
+import subprocess
 
 
 class Panel(wx.Panel):
@@ -97,7 +97,10 @@ class Panel(wx.Panel):
 
 
     def _on_open_dir(self, event):
-        print('open output location button pressed')
+        """ Open file explorer at destination directory """
+        if os.path.isdir(self.out_path):
+            filebrowser_path = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
+            subprocess.run([filebrowser_path, self.out_path])
 
 
 
