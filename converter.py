@@ -79,8 +79,8 @@ class Panel(wx.Panel):
     
     
     def _on_select(self, event):
+        """ Get and store path to source file """
         print('select source button pressed')
-        self.source_path = ''
         dlg = wx.FileDialog(self, 'Choose source file', self.source_path,
                             "", "*.*", wx.FD_OPEN)
         if dlg.ShowModal() == wx.ID_OK:
@@ -91,7 +91,14 @@ class Panel(wx.Panel):
 
 
     def _on_change(self, event):
+        """ Get and store path to output directory """
         print('change button pressed')
+        dlg = wx.DirDialog(self, 'Choose output directory', self.source_path,
+                           wx.DD_DIR_MUST_EXIST)
+        if dlg.ShowModal() == wx.ID_OK:
+            self.out_path = dlg.GetPath()
+        print('output path chosen:', self.out_path)
+                            
 
 
     def _on_convert(self, event):
