@@ -89,13 +89,24 @@ class Panel(wx.Panel):
         
         # Row 1 : 'File:', dynamic text, Choose button
         row1_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        file_label = wx.StaticText(self, label='File:')
+        self.dyn_file_label = wx.StaticText(self, label='Choose file to convert')
+        self.choose_file_button = wx.Button(self, label='Choose', id=1)
         
         # Row 2 : 'Destination:', dynamic text, Choose button
         row2_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        dest_label = wx.StaticText(self, label='Destination:')
+        self.dyn_dest_label = wx.StaticText(self, label='Same as file to convert')
+        self.choose_dest_button = wx.Button(self, label='Choose', id=2)
         
-        # Row 3: To, combobox, Convert Button, Open Directory button
+        # Row 3 : To, combobox, Convert Button, Open Directory button
         row3_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        to_label = wx.StaticText(self, label='Convert to:')
+        self.combobox = wx.ComboBox(self, size=(80,-1), choices=self.choices)
+        self.convert_button = wx.Button(self, label='Convert', id=3)
+        self.open_dir_button = wx.Button(self, label='Open Directory', id=4)
         
+        # Top-level layout        
         main_sizer.AddMany([(row1_sizer, 1, wx.ALL|wx.CENTRE, 5),
                             (row2_sizer, 1, wx.ALL|wx.CENTRE, 5),
                             (row3_sizer, 1, wx.ALL|wx.CENTRE, 5)])
