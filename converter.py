@@ -2,6 +2,7 @@
 
 import wx
 from PIL import Image
+import os
 
 
 
@@ -79,15 +80,28 @@ class Panel(wx.Panel):
     
     def _on_select(self, event):
         print('select source button pressed')
-    
+        self.source_path = ''
+        dlg = wx.FileDialog(self, 'Choose source file', self.source_path,
+                            "", "*.*", wx.FD_OPEN)
+        if dlg.ShowModal() == wx.ID_OK:
+            filename = dlg.GetFilename()
+            dirname = dlg.GetDirectory()
+            self.source_path = os.path.join(dirname, filename)
+        print('source path chosen:', self.source_path)
+
+
     def _on_change(self, event):
         print('change button pressed')
-    
+
+
     def _on_convert(self, event):
         print('on convert button pressed')
-    
+
+
     def _on_open(self, event):
         print('open output location button pressed')
+
+
 
 
 class Frame(wx.Frame):
