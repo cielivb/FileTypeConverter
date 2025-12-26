@@ -73,7 +73,7 @@ class Panel(wx.Panel):
             filename = dlg.GetFilename()
             dirname = dlg.GetDirectory()
             self.source_path = os.path.join(dirname, filename)
-        self.dyn_label_source.SetLabel(self.source_path)
+        self.dyn_file_label.SetLabel(self.source_path)
 
 
     def _on_choose_dest(self, event):
@@ -82,7 +82,7 @@ class Panel(wx.Panel):
                            wx.DD_DIR_MUST_EXIST)
         if dlg.ShowModal() == wx.ID_OK:
             self.out_path = dlg.GetPath()
-        self.dyn_label_out.SetLabel(self.out_path)
+        self.dyn_dest_label.SetLabel(self.out_path)
 
 
     def _on_convert(self, event):
