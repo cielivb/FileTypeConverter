@@ -8,7 +8,16 @@ from PIL import Image
 class Panel(wx.Panel):
     def __init__(self, parent, *args, **kwargs):
         wx.Panel.__init__(self, parent, *args, **kwargs)
+        
+        # General initialisation --------------------------------
+        
         self.choices = ['.png', '.jpg', '.webp', '.bmp', '.pdf']
+        self.source_path = ''
+        self.out_path = ''
+        self.old_file_type = ''
+        self.new_file_type = ''
+        
+        # GUI initialisation ------------------------------------
         
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         column_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -24,7 +33,7 @@ class Panel(wx.Panel):
         # Col 2 : dynamic src text, 'to', dynamic output location text
         c2_sizer = wx.BoxSizer(wx.VERTICAL)
         self.dyn_label_source = wx.StaticText(self, label='')  
-        
+
         type_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.left_cb = wx.ComboBox(self, size=(80,-1), 
                                    choices=self.choices)  
