@@ -92,12 +92,18 @@ class Panel(wx.Panel):
         file_label = wx.StaticText(self, label='File:')
         self.dyn_file_label = wx.StaticText(self, label='Choose file to convert')
         self.choose_file_button = wx.Button(self, label='Choose', id=1)
+        row1_sizer.AddMany([(file_label, 1, wx.ALL|wx.CENTRE, 5),
+                            (self.dyn_file_label, 6, wx.ALL|wx.CENTRE, 5),
+                            (self.choose_file_button, 1, wx.ALL|wx.CENTRE, 5)])
         
         # Row 2 : 'Destination:', dynamic text, Choose button
         row2_sizer = wx.BoxSizer(wx.HORIZONTAL)
         dest_label = wx.StaticText(self, label='Destination:')
         self.dyn_dest_label = wx.StaticText(self, label='Same as file to convert')
         self.choose_dest_button = wx.Button(self, label='Choose', id=2)
+        row2_sizer.AddMany([(dest_label, 1, wx.ALL|wx.CENTRE, 5),
+                            (self.dyn_dest_label, 6, wx.ALL|wx.CENTRE, 5),
+                            (self.choose_dest_button, 1, wx.ALL|wx.CENTRE, 5)])
         
         # Row 3 : To, combobox, Convert Button, Open Directory button
         row3_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -105,11 +111,15 @@ class Panel(wx.Panel):
         self.combobox = wx.ComboBox(self, size=(80,-1), choices=self.choices)
         self.convert_button = wx.Button(self, label='Convert', id=3)
         self.open_dir_button = wx.Button(self, label='Open Directory', id=4)
+        row3_sizer.AddMany([(to_label, 0, wx.ALL|wx.CENTRE, 5),
+                            (self.combobox, 0, wx.ALL|wx.CENTRE, 5),
+                            (self.convert_button, 0, wx.ALL|wx.CENTRE, 5),
+                            (self.open_dir_button, 0, wx.ALL|wx.CENTRE, 5)])
         
         # Top-level layout        
-        main_sizer.AddMany([(row1_sizer, 1, wx.ALL|wx.CENTRE, 5),
-                            (row2_sizer, 1, wx.ALL|wx.CENTRE, 5),
-                            (row3_sizer, 1, wx.ALL|wx.CENTRE, 5)])
+        main_sizer.AddMany([(row1_sizer, 1, wx.ALL|wx.EXPAND, 5),
+                            (row2_sizer, 1, wx.ALL|wx.EXPAND, 5),
+                            (row3_sizer, 1, wx.ALL|wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
     
     
