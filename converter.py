@@ -17,6 +17,7 @@ class Panel(wx.Panel):
         self.out_path = ''
         self.old_file_type = ''
         self.new_file_type = ''
+        self.status_bar = self.GetParent().GetStatusBar()
         
         # UI initialisation ------------------------------------
         
@@ -105,10 +106,11 @@ class Frame(wx.Frame):
     def __init__(self, parent=None, size=(400,200), 
                  pos=(100,100), title='FileTypeConverter'):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
-        Panel(self)
         
         self.CreateStatusBar()
-        self.SetStatusText('Please choose a file to convert.')  
+        self.SetStatusText('') 
+        
+        Panel(self)        
         
         self.SetAutoLayout(False)
         self.SetMinSize((400,200))
