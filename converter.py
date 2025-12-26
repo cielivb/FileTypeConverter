@@ -28,12 +28,13 @@ class Panel(wx.Panel):
         label_source = wx.StaticText(self, label='Source:') 
         label_out = wx.StaticText(self, label='Output location:') 
         c1_sizer.Add(label_source, 0, wx.ALL|wx.ALIGN_LEFT, 5)
-        c1_sizer.AddStretchSpacer()
+        c1_sizer.AddStretchSpacer(prop=2)
         c1_sizer.Add(label_out, 0, wx.ALL|wx.ALIGN_LEFT, 5)
         
         # Col 2 : dynamic src text, 'to', dynamic output location text
         c2_sizer = wx.BoxSizer(wx.VERTICAL)
-        self.dyn_label_source = wx.StaticText(self, label='')  
+        self.dyn_label_source = wx.StaticText(self, 
+                                              label='Choose file to convert')  
 
         type_sizer = wx.BoxSizer(wx.HORIZONTAL)
         self.left_cb = wx.ComboBox(self, size=(80,-1), 
@@ -45,10 +46,13 @@ class Panel(wx.Panel):
                             (label_to, 0, wx.ALL|wx.CENTRE, 5),
                             (self.right_cb, 1, wx.ALL|wx.CENTRE, 5)])
         
-        self.dyn_label_out = wx.StaticText(self, label='')
-        c2_sizer.AddMany([(self.dyn_label_source, 0, wx.ALL|wx.ALIGN_LEFT, 5),
-                          (type_sizer, 0, wx.ALL|wx.CENTRE, 5),
-                          (self.dyn_label_out, 0, wx.ALL|wx.ALIGN_RIGHT, 5)])
+        self.dyn_label_out = wx.StaticText(self, label='Same directory as input file')
+        c2_sizer.AddMany([(self.dyn_label_source, 0, 
+                           wx.ALL|wx.ALIGN_CENTRE, 5),
+                          (type_sizer, 0, 
+                           wx.ALL|wx.CENTRE, 5),
+                          (self.dyn_label_out, 0, 
+                           wx.ALL|wx.ALIGN_CENTRE, 5)])
         
         # Col  3 : select button, right combobox, change button
         c3_sizer = wx.BoxSizer(wx.VERTICAL)
@@ -70,11 +74,14 @@ class Panel(wx.Panel):
                               (self.open_button, 0, wx.ALL|wx.EXPAND, 5)])
         
         # Top level sizing
-        column_sizer.AddMany([(c1_sizer, 1, wx.ALL|wx.EXPAND, 5),
-                              (c2_sizer, 1, wx.ALL|wx.EXPAND, 5),
-                              (c3_sizer, 1, wx.ALL|wx.EXPAND, 5)])
+        column_sizer.AddMany([(c1_sizer, 1, 
+                               wx.ALL|wx.EXPAND, 5),
+                              (c2_sizer, 1, 
+                               wx.ALL|wx.EXPAND, 5),
+                              (c3_sizer, 1, 
+                               wx.ALL|wx.EXPAND, 5)])
         main_sizer.AddMany([(column_sizer, 0, wx.ALL|wx.EXPAND, 5),
-                            (bottom_sizer, 0, wx.ALL|wx.CENTRE, 5)])
+                            (bottom_sizer, 0, wx.ALL|wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
     
     
