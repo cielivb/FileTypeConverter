@@ -117,6 +117,10 @@ class Panel(wx.Panel):
             source_type = self.source_path.split(".")[-1].upper()
             dest_type = self.combobox.GetStringSelection()
             
+            # Continue only if a destination type has been chosen
+            if dest_type == '':
+                return
+            
             # Get new filename
             outdir = self._get_outpath()
             name = os.path.basename(self.source_path).split('.')[0]
