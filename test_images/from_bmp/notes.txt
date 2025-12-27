@@ -1,22 +1,22 @@
 Conversion from BMP files
 Last updated: 28/12/25
 
-Icon Test on XX/XX/XX XX:XX
-To BMP : 
+Icon Test on 28/12/25 11:49
+To BMP : Success
 To GIF : Not currently supported
-To ICO : 
-To JPEG : 
-To PDF : 
-To PNG : 
-To TIFF : 
-To WEBP : 
+To ICO : Success
+To JPEG : Success
+To PDF : Success
+To PNG : Success
+To TIFF : Success
+To WEBP : Success
 
-Potato Test on XX/XX/XX XX:XX
-To BMP : 
+Potato Test on 28/12/25 11:55
+To BMP : Success
 To GIF : Not currently supported
-To ICO : 
-To JPEG : 
-To PDF : 
-To PNG : 
-To TIFF : 
-To WEBP : 
+To ICO : Success
+To JPEG : Success
+To PDF : Success
+To PNG : Success
+To TIFF : Success
+To WEBP : Success

@@ -124,7 +124,7 @@ class Panel(wx.Panel):
                 image = image.convert('RGB')
         elif image.mode != 'RGBA': 
             image = image.convert('RGBA')
-        print(image.mode)
+
         if dest_type == 'BMP':
             # Use 32 bit BMP to preserve transparency where possible.
             # This purportedly works with BMP v4/v5 headers, and Pillow
