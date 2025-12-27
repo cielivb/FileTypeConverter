@@ -24,3 +24,9 @@ FileTypeConverter was developed to streamline conversion between different image
 
 ### Future development
 FileTypeConverter is designed to be a very simple utility tool, and thus has no major updates proposed for the foreseeable future.
+
+## How to Use FileTypeConverter
+Download the zip file from github, and extract it wherever you like. In the dist folder, you should find File Type Converter.exe. Run this either from the terminal or by left clicking on it.
+
+## License
+I have not yet specified the license.
