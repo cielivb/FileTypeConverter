@@ -102,14 +102,19 @@ class Panel(wx.Panel):
     def _on_convert(self, event):
         print('on convert button pressed') 
         if self.source_path != '':
+            # Get source and destination types
             source_type = self.source_path.split(".")[-1].upper()
             dest_type = self.combobox.GetStringSelection()
             
-            filename = ''.join(self.source_path.split(".")[:-1]) + '.' + dest_type
+            # Create filename for new file
+            if self.source_path == '':
+                filename = ''.join(self.source_path.split(".")[:-1]) + '.' + dest_type
+            else:
+                name = self.source_path.split("/")[-1] # e.g., 'name.jpg'
+                name = ''.join(name.split(".")[0]) + '.' + dest_type # 'name.png'
+                filename = os.path.join(self.source_path, name)
             
-            image = Image.open(self.source_path)
-            image.save(filename, dest_type)
-            
+            # Convert file
             try:
                 image = Image.open(self.source_path)
                 image.save(filename, dest_type)
