@@ -12,7 +12,7 @@ class Panel(wx.Panel):
         
         # General initialisation --------------------------------
         
-        self.choices = ['BMP', 'ICO', 'JPG', 'PDF', 'PNG', 'TIFF', 'WEBP']
+        self.choices = ['BMP', 'ICO', 'JPEG', 'PDF', 'PNG', 'TIFF', 'WEBP']
         self.source_path = ''
         self.out_path = ''
         self.old_file_type = ''
@@ -130,10 +130,15 @@ class Panel(wx.Panel):
             # Convert file
             try:
                 image = Image.open(self.source_path)
-                if image.mode != 'RGBA':
+                if dest_type == 'JPEG' or dest_type == 'JPG':
+                    # JPG and JPEG do not support transparency
+                    image = image.convert('RGB')
+                else:
+                    # Other file types support transparency
                     image = image.convert('RGBA')
                 image.save(filename, dest_type)
                 message = f'Converted {source_type} to {dest_type}'
+                
             except:
                 message = f'Failed to convert {source_type} to {dest_type}'
             finally:
