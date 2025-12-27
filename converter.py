@@ -141,7 +141,10 @@ class Frame(wx.Frame):
                  pos=(100,100), title='FileTypeConverter'):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
         
-        icon = wx.Icon('assets/icon.ico', wx.BITMAP_TYPE_ICO)
+        # Set icon
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        icon_path = os.path.join(script_dir, 'assets', 'icon.ico')
+        icon = wx.Icon(icon_path, wx.BITMAP_TYPE_ICO)
         self.SetIcon(icon)
         
         self.CreateStatusBar()
