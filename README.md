@@ -8,4 +8,19 @@
 <!-- badges: end -->
 
 # FileTypeConverter
-wxPython application to convert between different file types
+
+## About FileTypeConverter
+FileTypeConverter is a wxPython GUI application for converting between different image file types. 
+
+FileTypeConverter enables the user to:
+- Convert image files to BMP, ICO, JPG, PDF, PNG, TIFF, and WEBP formats
+- Specify converted file destination (default to same directory as original file)
+
+### Example Videos
+TBA
+
+### FileTypeConverter Motivation
+FileTypeConverter was developed to streamline conversion between different image file types. This is useful both as a general utility tool and for developing tests for programs that handle various image file types.
+
+### Future development
+FileTypeConverter is designed to be a very simple utility tool, and thus has no major updates proposed for the foreseeable future.
