@@ -12,7 +12,7 @@ class Panel(wx.Panel):
         
         # General initialisation --------------------------------
         
-        self.choices = ['.png', '.jpg', '.webp', '.bmp', '.pdf']
+        self.choices = ['BMP', 'ICO', 'JPG', 'PDF', 'PNG', 'WEBP']
         self.source_path = ''
         self.out_path = ''
         self.old_file_type = ''
@@ -92,17 +92,32 @@ class Panel(wx.Panel):
         self.dyn_dest_label.SetLabel(self.out_path)
 
 
-    def _on_convert(self, event):
-        print('on convert button pressed')
-
-
     def _on_open_dir(self, event):
         """ Open file explorer at destination directory """
         if os.path.isdir(self.out_path):
             filebrowser_path = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
             subprocess.run([filebrowser_path, self.out_path])
-
-
+    
+    
+    def _on_convert(self, event):
+        print('on convert button pressed') 
+        if self.source_path != '':
+            source_type = self.source_path.split(".")[-1].upper()
+            dest_type = self.combobox.GetStringSelection()
+            
+            filename = ''.join(self.source_path.split(".")[:-1]) + '.' + dest_type
+            
+            image = Image.open(self.source_path)
+            image.save(filename, dest_type)
+            
+            try:
+                image = Image.open(self.source_path)
+                image.save(filename, dest_type)
+                message = f'Converted {source_type} to {dest_type}'
+            except:
+                message = f'Failed to convert {source_type} to {dest_type}'
+            finally:
+                self.status_bar.PushStatusText(message)
 
 
 class Frame(wx.Frame):
