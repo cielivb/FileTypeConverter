@@ -108,17 +108,37 @@ class Panel(wx.Panel):
         if os.path.isdir(outpath):
             filebrowser_path = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
             subprocess.run([filebrowser_path, outpath])
-    
+
+
+    def _convert(self, dest_type):
+        """ Save copy of source file with user-specified extension """
+        image = Image.open(self.source_path)
+        
+        # Use RGB for destination file types that do not support 
+        # transparency, otherwise use RGBA.
+        if dest_type == 'JPEG' and image.mode in ('RGBA', 'P'):
+            # JPEG does not support transparency
+            image = image.convert('RGB')
+        elif image.mode != 'RGBA': 
+            image = image.convert('RGBA')
+            
+        if dest_type == 'BMP':
+            # Use 32 bit BMP to preserve transparency where possible.
+            # This purportedly works with BMP v4/v5 headers, and Pillow
+            # handles this automatically, according to CoPilot...
+            image.save(filename, format=dest_type, bits=32)
+        else:
+            image.save(filename, format=dest_type, lossless=True)
+                
     
     def _on_convert(self, event):
-        print('on convert button pressed') 
+        """ Setup and execute conversion, then report failure/success """
         if self.source_path != '':
+            
             # Get source and destination types
             source_type = self.source_path.split(".")[-1].upper()
             dest_type = self.combobox.GetStringSelection()
-            
-            # Continue only if a destination type has been chosen
-            if dest_type == '':
+            if dest_type == '': 
                 return
             
             # Get new filename
@@ -127,28 +147,9 @@ class Panel(wx.Panel):
             name = name + '.' + dest_type # Add extension
             filename = os.path.join(outdir, name)
            
-            # Convert file
-            try:
-                image = Image.open(self.source_path)
-                
-                # Use RGB for destination file types that do not support 
-                # transparency, otherwise use RGBA.
-                if dest_type == 'JPEG' and image.mode in ('RGBA', 'P'):
-                    # JPEG does not support transparency
-                    image = image.convert('RGB')
-                elif image.mode != 'RGBA': 
-                    image = image.convert('RGBA')
-                    
-                if dest_type == 'BMP':
-                    # Use 32 bit BMP to preserve transparency where possible.
-                    # This purportedly works with BMP v4/v5 headers, and Pillow
-                    # handles this automatically, according to CoPilot...
-                    image.save(filename, format=dest_type, bits=32)
-                else:
-                    image.save(filename, format=dest_type, lossless=True)
-                    
+            try: # Convert file
+                self._convert(dest_type)    
                 message = f'Converted {source_type} to {dest_type}'
-                
             except:
                 message = f'Failed to convert {source_type} to {dest_type}'
             finally:
