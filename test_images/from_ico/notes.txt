@@ -1,2 +1,22 @@
 Conversion from ICO files
-Last updated: 27/12/25
+Last updated: 28/12/25
+
+Icon Test on XX/XX/XX XX:XX
+To BMP : 
+To GIF : Not currently supported
+To ICO : 
+To JPEG : 
+To PDF : 
+To PNG : 
+To TIFF : 
+To WEBP : 
+
+Potato Test on XX/XX/XX XX:XX
+To BMP : 
+To GIF : Not currently supported
+To ICO : 
+To JPEG : 
+To PDF : 
+To PNG : 
+To TIFF : 
+To WEBP : 

@@ -110,7 +110,7 @@ class Panel(wx.Panel):
             subprocess.run([filebrowser_path, outpath])
 
 
-    def _convert(self, dest_type):
+    def _convert(self, dest_type, filename):
         """ Save copy of source file with user-specified extension """
         image = Image.open(self.source_path)
         
@@ -121,7 +121,7 @@ class Panel(wx.Panel):
             image = image.convert('RGB')
         elif image.mode != 'RGBA': 
             image = image.convert('RGBA')
-            
+        
         if dest_type == 'BMP':
             # Use 32 bit BMP to preserve transparency where possible.
             # This purportedly works with BMP v4/v5 headers, and Pillow
@@ -148,7 +148,7 @@ class Panel(wx.Panel):
             filename = os.path.join(outdir, name)
            
             try: # Convert file
-                self._convert(dest_type)    
+                self._convert(dest_type, filename)    
                 message = f'Converted {source_type} to {dest_type}'
             except:
                 message = f'Failed to convert {source_type} to {dest_type}'
