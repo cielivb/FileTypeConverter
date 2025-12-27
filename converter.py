@@ -90,6 +90,7 @@ class Panel(wx.Panel):
         if dlg.ShowModal() == wx.ID_OK:
             self.out_path = dlg.GetPath()
         self.dyn_dest_label.SetLabel(self.out_path)
+        self.row2_sizer.Layout()
 
 
     def _get_outpath(self):
