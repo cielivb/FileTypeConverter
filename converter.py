@@ -130,13 +130,12 @@ class Panel(wx.Panel):
             # Convert file
             try:
                 image = Image.open(self.source_path)
-                if dest_type == 'JPEG' or dest_type == 'JPG':
-                    # JPG and JPEG do not support transparency
+                if dest_type == 'JPEG' and image.mode in ('RGBA', 'P'):
+                    # JPEG does not support transparency
                     image = image.convert('RGB')
-                else:
-                    # Other file types support transparency
+                elif image.mode != 'RGBA': # Other file types support transparency
                     image = image.convert('RGBA')
-                image.save(filename, dest_type)
+                image.save(filename, format=dest_type, lossless=True)
                 message = f'Converted {source_type} to {dest_type}'
                 
             except:
