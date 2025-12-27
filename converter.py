@@ -92,11 +92,21 @@ class Panel(wx.Panel):
         self.dyn_dest_label.SetLabel(self.out_path)
 
 
+    def _get_outpath(self):
+        """ Return out path to use """
+        if self.out_path != '': # If outpath is specified by user
+            return self.out_path
+        elif self.source_path != '': # If outpath unspecified but source specified
+            return os.path.dirname(self.source_path)
+        return None # If both outpath and source paths are unspecified
+    
+    
     def _on_open_dir(self, event):
         """ Open file explorer at destination directory """
-        if os.path.isdir(self.out_path):
+        outpath = self._get_outpath()
+        if os.path.isdir(outpath):
             filebrowser_path = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
-            subprocess.run([filebrowser_path, self.out_path])
+            subprocess.run([filebrowser_path, outpath])
     
     
     def _on_convert(self, event):
@@ -106,13 +116,11 @@ class Panel(wx.Panel):
             source_type = self.source_path.split(".")[-1].upper()
             dest_type = self.combobox.GetStringSelection()
             
-            # Create filename for new file
-            if self.source_path == '':
-                filename = ''.join(self.source_path.split(".")[:-1]) + '.' + dest_type
-            else:
-                name = self.source_path.split("/")[-1] # e.g., 'name.jpg'
-                name = ''.join(name.split(".")[0]) + '.' + dest_type # 'name.png'
-                filename = os.path.join(self.source_path, name)
+            # Get new filename
+            outdir = self._get_outpath()
+            name = os.path.basename(self.source_path).split('.')[0]
+            name = name + '.' + dest_type # Add extension
+            filename = os.path.join(outdir, name)
             
             # Convert file
             try:
