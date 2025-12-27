@@ -126,6 +126,8 @@ class Panel(wx.Panel):
             # Convert file
             try:
                 image = Image.open(self.source_path)
+                if image.mode != 'RGBA':
+                    image = image.convert('RGBA')
                 image.save(filename, dest_type)
                 message = f'Converted {source_type} to {dest_type}'
             except:
@@ -138,6 +140,9 @@ class Frame(wx.Frame):
     def __init__(self, parent=None, size=(400,200), 
                  pos=(100,100), title='FileTypeConverter'):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
+        
+        icon = wx.Icon('assets/icon.ico', wx.BITMAP_TYPE_ICO)
+        self.SetIcon(icon)
         
         self.CreateStatusBar()
         self.SetStatusText('') 
