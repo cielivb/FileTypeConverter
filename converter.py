@@ -130,12 +130,23 @@ class Panel(wx.Panel):
             # Convert file
             try:
                 image = Image.open(self.source_path)
+                
+                # Use RGB for destination file types that do not support 
+                # transparency, otherwise use RGBA.
                 if dest_type == 'JPEG' and image.mode in ('RGBA', 'P'):
                     # JPEG does not support transparency
                     image = image.convert('RGB')
-                elif image.mode != 'RGBA': # Other file types support transparency
+                elif image.mode != 'RGBA': 
                     image = image.convert('RGBA')
-                image.save(filename, format=dest_type, lossless=True)
+                    
+                if dest_type == 'BMP':
+                    # Use 32 bit BMP to preserve transparency where possible.
+                    # This purportedly works with BMP v4/v5 headers, and Pillow
+                    # handles this automatically, according to CoPilot...
+                    image.save(filename, format=dest_type, bits=32)
+                else:
+                    image.save(filename, format=dest_type, lossless=True)
+                    
                 message = f'Converted {source_type} to {dest_type}'
                 
             except:
