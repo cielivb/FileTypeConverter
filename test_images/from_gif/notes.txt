@@ -1,22 +1,22 @@
 Conversion from GIF files
 Last updated: 28/12/25
 
-Icon Test on XX/XX/XX XX:XX
-To BMP : 
+Icon Test on 28/12/25 11:58
+To BMP : Success - first frame only
 To GIF : Not currently supported
-To ICO : 
-To JPEG : 
-To PDF : 
-To PNG : 
-To TIFF : 
-To WEBP : 
+To ICO : Success - first frame only
+To JPEG : Success - first frame only
+To PDF : Success - first frame only
+To PNG : Success - first frame only
+To TIFF : Success - first frame only
+To WEBP : Success - first frame only
 
-Potato Test on XX/XX/XX XX:XX
-To BMP : 
+Potato Test on 28/12/25 12:00
+To BMP : Success - first frame only
 To GIF : Not currently supported
-To ICO : 
-To JPEG : 
-To PDF : 
-To PNG : 
-To TIFF : 
-To WEBP : 
+To ICO : Success - first frame only
+To JPEG : Success - first frame only
+To PDF : Success - first frame only
+To PNG : Success - first frame only
+To TIFF : Success - first frame only
+To WEBP : Success - first frame only
