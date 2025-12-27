@@ -12,7 +12,7 @@ class Panel(wx.Panel):
         
         # General initialisation --------------------------------
         
-        self.choices = ['BMP', 'ICO', 'JPG', 'PDF', 'PNG', 'WEBP']
+        self.choices = ['BMP', 'ICO', 'JPG', 'PDF', 'PNG', 'TIFF', 'WEBP']
         self.source_path = ''
         self.out_path = ''
         self.old_file_type = ''
