@@ -126,7 +126,7 @@ class Panel(wx.Panel):
             name = os.path.basename(self.source_path).split('.')[0]
             name = name + '.' + dest_type # Add extension
             filename = os.path.join(outdir, name)
-            
+           
             # Convert file
             try:
                 image = Image.open(self.source_path)
