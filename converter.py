@@ -5,6 +5,8 @@ from PIL import Image
 import os
 import subprocess
 
+import traceback
+
 
 class Panel(wx.Panel):
     def __init__(self, parent, *args, **kwargs):
@@ -116,12 +118,13 @@ class Panel(wx.Panel):
         
         # Use RGB for destination file types that do not support 
         # transparency, otherwise use RGBA.
-        if dest_type == 'JPEG' and image.mode in ('RGBA', 'P'):
-            # JPEG does not support transparency
-            image = image.convert('RGB')
+        if dest_type == 'JPEG':
+            # JPEG does not support transparency            
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
         elif image.mode != 'RGBA': 
             image = image.convert('RGBA')
-        
+        print(image.mode)
         if dest_type == 'BMP':
             # Use 32 bit BMP to preserve transparency where possible.
             # This purportedly works with BMP v4/v5 headers, and Pillow
@@ -150,7 +153,8 @@ class Panel(wx.Panel):
             try: # Convert file
                 self._convert(dest_type, filename)    
                 message = f'Converted {source_type} to {dest_type}'
-            except:
+            except Exception:
+                traceback.print_exc()
                 message = f'Failed to convert {source_type} to {dest_type}'
             finally:
                 self.status_bar.PushStatusText(message)
