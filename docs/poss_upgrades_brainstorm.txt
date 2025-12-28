@@ -1,7 +1,0 @@
-FileTypeConverter possible upgrades
-
-Timeout on status bar messages
-Add GIF to display while converting (in status bar right side?)
-Additional file types
-Fix weird behaviour that occurs when user clicks into choose source
-dir for first time then cancels
