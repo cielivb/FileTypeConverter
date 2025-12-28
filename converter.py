@@ -1,7 +1,7 @@
 """ File Converter wxPython App """
 
 import wx
-from PIL import Image
+import PIL
 from pdf2image import convert_from_path
 import os
 import subprocess
@@ -113,23 +113,30 @@ class Panel(wx.Panel):
 
     def _convert_pdf(self, dest_type, filename):
         """ Convert each pdf page into a separate image """
+        # Create temp directory if not already present
+        
         images = convert_from_path(self.source_path) # List of Pillow images
-        filename = filename.split('.')[0] # e.g., filename.jpg -> filename
+        name = filename.split('.')[0] # e.g., filename.jpg -> filename
         for index, image in enumerate(images):
             
             # Add index to image filename
             pad_length = len(str(len(images)))
             padded_index = str(index).zfill(pad_length)
-            img_filename = filename + '_' + padded_index + '.' + dest_type
+            temp_filename = name + '_' + padded_index + '.PNG'
+            temp_path = os.path.join(os.path.dirname(__file__), 
+                                     'temp', temp_filename)
             
-            # Convert image
-            self._convert(dest_type, img_filename, image)
+            image.save(temp_filename, format='PNG', lossless=True)
+            self._convert(dest_type, filename, temp_path=temp_path)
 
 
-    def _convert(self, dest_type, filename, image=None):
+    def _convert(self, dest_type, filename, temp_path=None):
         """ Save copy of source file with user-specified extension """
-        if image == None:
-            image = Image.open(self.source_path)
+        if temp_path is None:
+            image = PIL.Image.open(self.source_path)
+        else:
+            image = PIL.Image.open(temp_path)
+            filename = filename.split('.')[0] + '.' + dest_type
         
         # Use RGB for destination file types that do not support 
         # transparency, otherwise use RGBA.
