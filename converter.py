@@ -17,7 +17,6 @@ class Panel(wx.Panel):
         self.out_path = ''
         self.old_file_type = ''
         self.new_file_type = ''
-        self.status_bar = self.GetParent().GetStatusBar()
         
         # UI initialisation ------------------------------------
         
@@ -154,7 +153,7 @@ class Panel(wx.Panel):
             except Exception:
                 message = f'Failed to convert {source_type} to {dest_type}'
             finally:
-                self.status_bar.PushStatusText(message)
+                self.GetParent()._show_status_message(message)
 
 
 class Frame(wx.Frame):
@@ -168,14 +167,26 @@ class Frame(wx.Frame):
         icon = wx.Icon(icon_path, wx.BITMAP_TYPE_ICO)
         self.SetIcon(icon)
         
+        # Status bar initialisation
         self.CreateStatusBar()
         self.SetStatusText('') 
+        self.status_timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self._clear_status_message, self.status_timer)
         
         Panel(self)        
         
         self.SetAutoLayout(False)
         self.SetMinSize((400,200))
         self.Show()
+    
+    def _show_status_message(self, message):
+        """ Display message in bottom left of status bar for 5 seconds """
+        self.SetStatusText(message)
+        self.status_timer.StartOnce(5000) # 5000ms = 5 seconds
+    
+    def _clear_status_message(self, event):
+        """ Remove message from bottom left corner of status bar """
+        self.SetStatusText('')
 
 
 def main():
