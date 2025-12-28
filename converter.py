@@ -5,8 +5,6 @@ from PIL import Image
 import os
 import subprocess
 
-import traceback
-
 
 class Panel(wx.Panel):
     def __init__(self, parent, *args, **kwargs):
@@ -81,7 +79,7 @@ class Panel(wx.Panel):
             filename = dlg.GetFilename()
             dirname = dlg.GetDirectory()
             self.source_path = os.path.join(dirname, filename)
-        self.dyn_file_label.SetLabel(self.source_path)
+            self.dyn_file_label.SetLabel(self.source_path)
         self.row1_sizer.Layout()
 
 
@@ -91,7 +89,7 @@ class Panel(wx.Panel):
                            wx.DD_DIR_MUST_EXIST)
         if dlg.ShowModal() == wx.ID_OK:
             self.out_path = dlg.GetPath()
-        self.dyn_dest_label.SetLabel(self.out_path)
+            self.dyn_dest_label.SetLabel(self.out_path)
         self.row2_sizer.Layout()
 
 
@@ -154,7 +152,6 @@ class Panel(wx.Panel):
                 self._convert(dest_type, filename)    
                 message = f'Converted {source_type} to {dest_type}'
             except Exception:
-                traceback.print_exc()
                 message = f'Failed to convert {source_type} to {dest_type}'
             finally:
                 self.status_bar.PushStatusText(message)
