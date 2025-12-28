@@ -2,8 +2,10 @@
 
 import wx
 from PIL import Image
+from pdf2image import convert_from_path
 import os
 import subprocess
+import traceback
 
 
 class Panel(wx.Panel):
@@ -109,9 +111,25 @@ class Panel(wx.Panel):
             subprocess.run([filebrowser_path, outpath])
 
 
-    def _convert(self, dest_type, filename):
+    def _convert_pdf(self, dest_type, filename):
+        """ Convert each pdf page into a separate image """
+        images = convert_from_path(self.source_path) # List of Pillow images
+        filename = filename.split('.')[0] # e.g., filename.jpg -> filename
+        for index, image in enumerate(images):
+            
+            # Add index to image filename
+            pad_length = len(str(len(images)))
+            padded_index = str(index).zfill(pad_length)
+            img_filename = filename + '_' + padded_index + '.' + dest_type
+            
+            # Convert image
+            self._convert(dest_type, img_filename, image)
+
+
+    def _convert(self, dest_type, filename, image=None):
         """ Save copy of source file with user-specified extension """
-        image = Image.open(self.source_path)
+        if image == None:
+            image = Image.open(self.source_path)
         
         # Use RGB for destination file types that do not support 
         # transparency, otherwise use RGBA.
@@ -148,9 +166,16 @@ class Panel(wx.Panel):
             filename = os.path.join(outdir, name)
            
             try: # Convert file
-                self._convert(dest_type, filename)    
+                if source_type == 'PDF':
+                    # PDFs can contain multiple pages and therefore need
+                    # a wrapper to process multiple images
+                    self._convert_pdf(dest_type, filename)
+                else:
+                    self._convert(dest_type, filename)                    
                 message = f'Converted {source_type} to {dest_type}'
+                
             except Exception:
+                traceback.print_exc()
                 message = f'Failed to convert {source_type} to {dest_type}'
             finally:
                 self.GetParent()._show_status_message(message)
