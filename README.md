@@ -7,7 +7,7 @@
 ![Github License](https://img.shields.io/github/license/cielivb/FileTypeConverter?color=yellow)
 <!-- badges: end -->
 
-# FileTypeConverter ![App icon](assets/icon_small.png)
+# FileTypeConverter ![App icon](docs/icon_small.png)
 
 ## About FileTypeConverter
 FileTypeConverter is a wxPython GUI application for converting image files to BMP, ICO, JPG, PDF, PNG, TIFF, and WEBP formats.
