@@ -22,7 +22,7 @@ Using online file converters can get annoying when you start needing to convert 
 FileTypeConverter was last tested on Windows 11 on 29/12/2025. A test directory containing reference test images is included in the repo, alongside test notes. Note I do not plan to test FileTypeConverter comprehensively, and thus strange behaviour may occur in edge cases. I may fix such behaviour as I encounter it while using it.
 
 ### Future development
-FileTypeConverter is designed to be a very simple utility tool, and thus has no major updates proposed for the foreseeable future. Proposed minor future updates are noted in the issue tracker.
+FileTypeConverter is designed to be a very simple utility tool, and thus has no major updates proposed for the foreseeable future. Proposed minor future updates are noted in the [Issue Tracker](https://github.com/cielivb/FileTypeConverter/issues).
 
 ## How to Use FileTypeConverter
 Download the zip file from github, and extract it wherever you like. In the dist folder, you should find File Type Converter.exe. Run this either from the terminal or by left clicking on it. You can also create a shortcut to the .exe file.
