@@ -7,7 +7,7 @@
 ![Github License](https://img.shields.io/github/license/cielivb/FileTypeConverter?color=yellow)
 <!-- badges: end -->
 
-# FileTypeConverter
+# FileTypeConverter ![App icon](assets/icon_small.png)
 
 ## About FileTypeConverter
 FileTypeConverter is a wxPython GUI application for converting image files to BMP, ICO, JPG, PDF, PNG, TIFF, and WEBP formats.
@@ -22,11 +22,7 @@ Using online file converters can get annoying when you start needing to convert 
 FileTypeConverter was last tested on Windows 11 on 29/12/2025. A test directory containing reference test images is included in the repo, alongside test notes. Note I do not plan to test FileTypeConverter comprehensively, and thus strange behaviour may occur in edge cases. I may fix such behaviour as I encounter it while using it.
 
 ### Future development
-FileTypeConverter is designed to be a very simple utility tool, and thus has no major updates proposed for the foreseeable future. Possible future minor updates may include:
-- Timeout on status bar messages
-- Add GIF to display during conversion
-- Support for more file types
-- Bugfixes
+FileTypeConverter is designed to be a very simple utility tool, and thus has no major updates proposed for the foreseeable future. Proposed minor future updates are noted in the issue tracker.
 
 ## How to Use FileTypeConverter
 Download the zip file from github, and extract it wherever you like. In the dist folder, you should find File Type Converter.exe. Run this either from the terminal or by left clicking on it. You can also create a shortcut to the .exe file.
