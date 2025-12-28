@@ -8,3 +8,25 @@ cleanup process.
 
 import os
 
+
+def main():
+    test_dir = os.path.dirname(__file__)
+    
+    for name in os.listdir(test_dir):
+        directory = os.path.join(test_dir, name)
+        
+        if os.path.isdir(directory):
+            # Remove all non-txt files and directories from directory
+            for item in os.listdir(directory):
+                
+                # Keep text files
+                if item.endswith('.txt') or item.endswith('.TXT'):
+                    continue
+                
+                # Remove everything else
+                os.remove(os.path.join(directory, item))
+    
+
+
+if __name__ == '__main__':
+    main()
