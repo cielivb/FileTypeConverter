@@ -2,6 +2,15 @@ Conversion from PDF files
 Last updated: 29/12/25
 
 
+Potato Test on 29/12/25 06:57
+To BMP : Failed - image does not render correctly
+To GIF : Not currently supported
+To ICO : Failed - image does not render correctly
+To JPEG : Failed - image does not render correctly
+To PDF : Failed - image does not render correctly
+To PNG : Failed - image does not render correctly
+To TIFF : Failed - image does not render correctly
+To WEBP : Failed - image does not render correctly
 
 Icon Test on 29/12/25 06:53
 To BMP : Failed - image does not render correctly
