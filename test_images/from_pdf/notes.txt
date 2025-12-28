@@ -1,22 +1,28 @@
 Conversion from PDF files
-Last updated: 28/12/25
+Last updated: 29/12/25
 
-Icon Test on XX/XX/XX XX:XX
-To BMP : 
-To GIF : Not currently supported
-To ICO : 
-To JPEG : 
-To PDF : 
-To PNG : 
-To TIFF : 
-To WEBP : 
+29/12/25 3am test notes:
+- File "x-wingide-python-shell://2031357179808/2", line 117, in _convert
+    image = Image.open(self.source_path)
+-... PIL.UnidentifiedImageError: cannot identify image file 
+- Pretty sure Pillow doesn't support conversion from PDF files but will double check
 
-Potato Test on XX/XX/XX XX:XX
-To BMP : 
+Icon Test on 29/12/25 03:42
+To BMP : Failed - PIL.UnidentifiedImageError
 To GIF : Not currently supported
-To ICO : 
-To JPEG : 
-To PDF : 
-To PNG : 
-To TIFF : 
-To WEBP : 
+To ICO : Failed - PIL.UnidentifiedImageError
+To JPEG : Failed - PIL.UnidentifiedImageError
+To PDF : Failed - PIL.UnidentifiedImageError
+To PNG : Failed - PIL.UnidentifiedImageError
+To TIFF : Failed - PIL.UnidentifiedImageError
+To WEBP : Failed - PIL.UnidentifiedImageError
+
+Potato Test on 29/12/25 03:46
+To BMP : Failed - PIL.UnidentifiedImageError
+To GIF : Not currently supported
+To ICO : Failed - PIL.UnidentifiedImageError
+To JPEG : Failed - PIL.UnidentifiedImageError
+To PDF : Failed - PIL.UnidentifiedImageError
+To PNG : Failed - PIL.UnidentifiedImageError
+To TIFF : Failed - PIL.UnidentifiedImageError
+To WEBP : Failed - PIL.UnidentifiedImageError
