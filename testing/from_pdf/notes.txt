@@ -2,6 +2,16 @@ Conversion from PDF files
 Last updated: 29/12/25
 
 
+Multipage Test on 29/12/25 10:45
+Conversion from 7 page pdf to 7 ICO files successful.
+Conversion from 7 page pdf to 7 JPEG files successful.
+Conversion from 7 page pdf to 7 PDF files successful. Is this desirable behaviour though??
+
+Multipage Test on 29/12/25 08:54
+Conversion from 7 page pdf to 7 BMP files successful.
+Icon and potato tests still fail as earlier. Possible this just happens with PDFs that are images only.
+
+
 Potato Test on 29/12/25 06:57
 To BMP : Failed - image does not render correctly
 To GIF : Not currently supported

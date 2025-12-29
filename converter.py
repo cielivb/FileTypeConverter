@@ -114,29 +114,35 @@ class Panel(wx.Panel):
     def _convert_pdf(self, dest_type, filename):
         """ Convert each pdf page into a separate image """
         # Create temp directory if not already present
+        if not os.path.isdir(os.path.join(os.path.dirname(__file__), 'temp')):
+            os.mkdir('temp')
         
         images = convert_from_path(self.source_path) # List of Pillow images
-        name = filename.split('.')[0] # e.g., filename.jpg -> filename
+        
+        name = os.path.basename(filename)
+        name = name.split('.')[0] # e.g., filename.jpg -> filename
         for index, image in enumerate(images):
             
             # Add index to image filename
             pad_length = len(str(len(images)))
             padded_index = str(index).zfill(pad_length)
             temp_filename = name + '_' + padded_index + '.PNG'
+            
             temp_path = os.path.join(os.path.dirname(__file__), 
                                      'temp', temp_filename)
-            
-            image.save(temp_filename, format='PNG', lossless=True)
-            self._convert(dest_type, filename, temp_path=temp_path)
+            image.save(temp_path, format='PNG', lossless=True)
+            self._convert(dest_type, filename, 
+                          temp_path=temp_path, 
+                          index=padded_index)
 
 
-    def _convert(self, dest_type, filename, temp_path=None):
+    def _convert(self, dest_type, filename, temp_path=None, index=None):
         """ Save copy of source file with user-specified extension """
         if temp_path is None:
             image = PIL.Image.open(self.source_path)
         else:
             image = PIL.Image.open(temp_path)
-            filename = filename.split('.')[0] + '.' + dest_type
+            filename = filename.split('.')[0] + '_' + index + '.' + dest_type
         
         # Use RGB for destination file types that do not support 
         # transparency, otherwise use RGBA.
