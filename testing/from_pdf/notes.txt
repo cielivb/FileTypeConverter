@@ -4,6 +4,7 @@ Last updated: 29/12/25
 
 Multipage Test on 29/12/25 14:27
 Conversion from 7 page pdf to 7 PDF files successful. Temp file cleanup successful.
+Conversion from 7 page pdf to all other file types successful.
 
 Multipage Test on 29/12/25 10:45
 Conversion from 7 page pdf to 7 ICO files successful.
