@@ -66,8 +66,8 @@ class Panel(wx.Panel):
                             (self.row2_sizer, 1, wx.ALL|wx.EXPAND, 5),
                             (row3_sizer, 1, wx.ALL|wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
-
-        # Regular interval code setup
+        
+        # Timer setup
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self._toggle_gif, self.timer)
         self.timer.Start(200) # Run every 0.2 seconds
@@ -99,7 +99,7 @@ class Panel(wx.Panel):
                 
     
     def _toggle_gif(self, event):
-        """ Turn GIF on and off in response to number of conversion processes """
+        """ Turn GIF on and off depending on number of conversion processes """
         # Remove expired threads
         for thread in self.threads:
             if not thread.is_alive():
@@ -249,23 +249,45 @@ class Frame(wx.Frame):
         self.SetIcon(icon)
         
         # Status bar initialisation
+        self.status_message = ''        
         self.CreateStatusBar()
-        self.SetStatusText('') 
-        #self.status_timer = wx.Timer(self)
-        #self.Bind(wx.EVT_TIMER, self._clear_status_message, self.status_timer)
+        self.SetStatusText(self.status_message)
+        
+        # Timer initialisation
+        self.status_timeout = 5000 # 5000ms = 5 seconds
+        self.timer_freq = 200 # Run timer code every 0.2 seconds
+        self.current_status_display_duration = 0    
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self._on_timer, self.timer)
         
         self.panel = Panel(self)   
         
         self.SetAutoLayout(False)
         self.SetMinSize((400,200))
         self.Show()
+        self.timer.Start(self.timer_freq)
+
+
+    def _on_timer(self, event):
+        """"""
+        if self.status_message != '':
+            self.current_status_display_duration += self.timer_freq
+            if self.current_status_display_duration > self.status_timeout:
+                self._clear_status_message()
     
     def _show_status_message(self, message):
         """ Display message in bottom left of status bar for 5 seconds """
         self.SetStatusText(message)
-        #self.status_timer.StartOnce(5000) # 5000ms = 5 seconds
+        # Update class variable which keeps track of when last status 
+        # message push was. The timed execution code then checks this
+        # variable and clears the status bar if it has been more than 
+        # 5 seconds.
+        if message != self.status_message:
+            self.current_status_display_duration = 0
+            self.status_message = message
+        self.SetStatusText(self.status_message)
     
-    def _clear_status_message(self, event):
+    def _clear_status_message(self):
         """ Remove message from bottom left corner of status bar """
         self.SetStatusText('')
 
