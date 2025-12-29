@@ -67,6 +67,11 @@ class Panel(wx.Panel):
                             (row3_sizer, 1, wx.ALL|wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
 
+        # Regular interval code setup
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self._toggle_gif, self.timer)
+        self.timer.Start(200) # Run every 0.2 seconds
+        
         
         # Set Bindings --------------------------------------------
         
@@ -93,17 +98,20 @@ class Panel(wx.Panel):
         self.gif_ctrl.SetInactiveBitmap(bg_bmp)
                 
     
-    def _toggle_gif(self):
+    def _toggle_gif(self, event):
         """ Turn GIF on and off in response to number of conversion processes """
-        print(f'in _toggle_gif : length of self.threads = {len(self.threads)}')
+        # Remove expired threads
+        for thread in self.threads:
+            if not thread.is_alive():
+                self.threads.remove(thread)
+        
+        # Toggle GIF - off if no threads, on if at least one thread
         if len(self.threads) > 0 and not self.gif_ctrl.IsPlaying():
             # Play GIF whenever at least one conversion is taking place
             self.gif_ctrl.Play()
-            print('playing')
         elif len(self.threads) == 0 and self.gif_ctrl.IsPlaying():
             # Do not play GIF if no conversions are taking place
             self.gif_ctrl.Stop()
-            print('stopped')
     
     
     def _on_choose_source(self, event):
@@ -205,11 +213,6 @@ class Panel(wx.Panel):
         finally:
             # Show GUI success/fail message
             self.GetParent()._show_status_message(message)   
-            
-            # Remove current thread from self.threads
-            for thread in self.threads:
-                if thread.GetName() == threading.get_ident().getName():
-                    self.threads.remove(thread)
     
     
     def _on_convert(self, event):
@@ -231,10 +234,7 @@ class Panel(wx.Panel):
             thread = threading.Thread(target=self._run_conversion,
                                       args=(filename, source_type, dest_type))
             self.threads.append(thread)
-            self._toggle_gif()
             thread.start()
-            self.threads.remove(thread)
-            self._toggle_gif()
 
 
 class Frame(wx.Frame):
