@@ -192,6 +192,14 @@ class Panel(wx.Panel):
                 message = f'Failed to convert {source_type} to {dest_type}'
             finally:
                 self.GetParent()._show_status_message(message)
+                temp_path = os.path.join(os.path.dirname(__file__), 'temp')
+                print(temp_path)
+                if os.path.isdir(temp_path):
+                    print('temp_path recognised as a directory')
+                    for tempfile in os.listdir(temp_path):
+                        # NEED TO USE ABSOLUTE PATH HERE
+                        print(f'removing {tempfile}')
+                        os.remove(tempfile)
 
 
 class Frame(wx.Frame):
