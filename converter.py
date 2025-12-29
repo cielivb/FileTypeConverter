@@ -6,6 +6,7 @@ import PIL
 from pdf2image import convert_from_path
 import os
 import subprocess
+import threading
 
 
 class Panel(wx.Panel):
@@ -19,6 +20,7 @@ class Panel(wx.Panel):
         self.out_path = ''
         self.old_file_type = ''
         self.new_file_type = ''
+        self.threads = []
         
         # UI initialisation ------------------------------------
         
@@ -64,7 +66,7 @@ class Panel(wx.Panel):
                             (self.row2_sizer, 1, wx.ALL|wx.EXPAND, 5),
                             (row3_sizer, 1, wx.ALL|wx.ALIGN_CENTRE, 5)])
         self.SetSizer(main_sizer)
-        
+
         
         # Set Bindings --------------------------------------------
         
@@ -89,6 +91,19 @@ class Panel(wx.Panel):
         del dc
         
         self.gif_ctrl.SetInactiveBitmap(bg_bmp)
+                
+    
+    def _toggle_gif(self):
+        """ Turn GIF on and off in response to number of conversion processes """
+        print(f'in _toggle_gif : length of self.threads = {len(self.threads)}')
+        if len(self.threads) > 0 and not self.gif_ctrl.IsPlaying():
+            # Play GIF whenever at least one conversion is taking place
+            self.gif_ctrl.Play()
+            print('playing')
+        elif len(self.threads) == 0 and self.gif_ctrl.IsPlaying():
+            # Do not play GIF if no conversions are taking place
+            self.gif_ctrl.Stop()
+            print('stopped')
     
     
     def _on_choose_source(self, event):
@@ -146,21 +161,25 @@ class Panel(wx.Panel):
             img_path = os.path.join(self.out_path, basename)
             self._convert(dest_type, img_path, image)
 
-
-    def _convert(self, dest_type, filename, image=None):
-        """ Save copy of source file with user-specified extension """
-        if image is None:
-            image = PIL.Image.open(self.source_path)
-        
-        # Use RGB for destination file types that do not support 
-        # transparency, otherwise use RGBA.
+    
+    def _adjust_colour_format(self, image, dest_type):
+        """ Use RGB for destination file types that do not support 
+         transparency, otherwise use RGBA. """
         if dest_type == 'JPEG':
             # JPEG does not support transparency            
             if image.mode != 'RGB':
                 image = image.convert('RGB')
         elif image.mode != 'RGBA': 
-            image = image.convert('RGBA')
-
+            image = image.convert('RGBA')   
+        return image
+    
+    
+    def _convert(self, dest_type, filename, image=None):
+        """ Save copy of source file with user-specified extension """
+        if image is None:
+            image = PIL.Image.open(self.source_path)
+        
+        image = self._adjust_colour_format(image, dest_type)
         if dest_type == 'BMP':
             # Use 32 bit BMP to preserve transparency where possible.
             # This purportedly works with BMP v4/v5 headers, and Pillow
@@ -170,10 +189,32 @@ class Panel(wx.Panel):
             image.save(filename, format=dest_type, lossless=True)
                 
     
+    def _run_conversion(self, filename, source_type, dest_type):
+        """ Convert either single or multiple image file, reporting status """
+       
+        try: # Convert file
+            if source_type == 'PDF':
+                # PDFs can contain multiple pages and therefore need
+                # a wrapper to process multiple images
+                self._convert_pdf(dest_type, filename)
+            else:
+                self._convert(dest_type, filename)                    
+            message = f'Converted {source_type} to {dest_type}'
+        except Exception:
+            message = f'Failed to convert {source_type} to {dest_type}'
+        finally:
+            # Show GUI success/fail message
+            self.GetParent()._show_status_message(message)   
+            
+            # Remove current thread from self.threads
+            for thread in self.threads:
+                if thread.GetName() == threading.get_ident().getName():
+                    self.threads.remove(thread)
+    
+    
     def _on_convert(self, event):
         """ Setup and execute conversion, then report failure/success """
         if self.source_path != '':
-            self.gif_ctrl.Play()            
             
             # Get source and destination types
             source_type = self.source_path.split(".")[-1].upper()
@@ -185,24 +226,15 @@ class Panel(wx.Panel):
             outdir = self._get_outpath()
             name = os.path.basename(self.source_path).split('.')[0]
             name = name + '.' + dest_type # Add extension
-            filename = os.path.join(outdir, name)
-           
-            try: # Convert file
-                if source_type == 'PDF':
-                    # PDFs can contain multiple pages and therefore need
-                    # a wrapper to process multiple images
-                    self._convert_pdf(dest_type, filename)
-                else:
-                    self._convert(dest_type, filename)                    
-                message = f'Converted {source_type} to {dest_type}'
-                
-            except Exception:
-                message = f'Failed to convert {source_type} to {dest_type}'
-                
-            finally:
-                # Show GUI success/fail message
-                self.GetParent()._show_status_message(message)
-                self.gif_ctrl.Stop()
+            filename = os.path.join(outdir, name)            
+            
+            thread = threading.Thread(target=self._run_conversion,
+                                      args=(filename, source_type, dest_type))
+            self.threads.append(thread)
+            self._toggle_gif()
+            thread.start()
+            self.threads.remove(thread)
+            self._toggle_gif()
 
 
 class Frame(wx.Frame):
@@ -219,10 +251,10 @@ class Frame(wx.Frame):
         # Status bar initialisation
         self.CreateStatusBar()
         self.SetStatusText('') 
-        self.status_timer = wx.Timer(self)
-        self.Bind(wx.EVT_TIMER, self._clear_status_message, self.status_timer)
+        #self.status_timer = wx.Timer(self)
+        #self.Bind(wx.EVT_TIMER, self._clear_status_message, self.status_timer)
         
-        Panel(self)        
+        self.panel = Panel(self)   
         
         self.SetAutoLayout(False)
         self.SetMinSize((400,200))
@@ -231,7 +263,7 @@ class Frame(wx.Frame):
     def _show_status_message(self, message):
         """ Display message in bottom left of status bar for 5 seconds """
         self.SetStatusText(message)
-        self.status_timer.StartOnce(5000) # 5000ms = 5 seconds
+        #self.status_timer.StartOnce(5000) # 5000ms = 5 seconds
     
     def _clear_status_message(self, event):
         """ Remove message from bottom left corner of status bar """
