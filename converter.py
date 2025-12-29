@@ -1,6 +1,7 @@
 """ File Converter wxPython App """
 
 import wx
+from wx.adv import AnimationCtrl, Animation
 import PIL
 from pdf2image import convert_from_path
 import os
@@ -50,10 +51,12 @@ class Panel(wx.Panel):
         to_label = wx.StaticText(self, label='Convert to:')
         self.combobox = wx.ComboBox(self, size=(80,-1), choices=self.choices)
         self.convert_button = wx.Button(self, label='Convert')
+        self._init_gif_ctrl() # Creates self.gif_ctrl
         self.open_dir_button = wx.Button(self, label='Open Directory')
         row3_sizer.AddMany([(to_label, 0, wx.ALL|wx.CENTRE, 5),
                             (self.combobox, 0, wx.ALL|wx.CENTRE, 5),
                             (self.convert_button, 0, wx.ALL|wx.CENTRE, 5),
+                            (self.gif_ctrl, 0, wx.ALL|wx.CENTRE, 5),
                             (self.open_dir_button, 0, wx.ALL|wx.CENTRE, 5)])
         
         # Main sizer layout        
@@ -69,6 +72,23 @@ class Panel(wx.Panel):
         self.choose_dest_button.Bind(wx.EVT_BUTTON, self._on_choose_dest)
         self.convert_button.Bind(wx.EVT_BUTTON, self._on_convert)
         self.open_dir_button.Bind(wx.EVT_BUTTON, self._on_open_dir)
+    
+    
+    def _init_gif_ctrl(self):
+        """ Create control for GIF displayed during conversion """
+        self.gif = Animation('assets/icon.gif', wx.adv.ANIMATION_TYPE_GIF)
+        self.gif_ctrl = AnimationCtrl(self, wx.ID_ANY, self.gif)
+        
+        # Create background bitmap to show when gif is not playing
+        bg_colour = self.GetBackgroundColour()
+        bg_bmp = wx.Bitmap(24,24) # Same size as GIF
+        dc = wx.MemoryDC(bg_bmp)
+        dc.SetBackground(wx.Brush(bg_colour))
+        dc.Clear()
+        dc.SelectObject(wx.NullBitmap) # Release dc
+        del dc
+        
+        self.gif_ctrl.SetInactiveBitmap(bg_bmp)
     
     
     def _on_choose_source(self, event):
@@ -164,6 +184,7 @@ class Panel(wx.Panel):
     def _on_convert(self, event):
         """ Setup and execute conversion, then report failure/success """
         if self.source_path != '':
+            self.gif_ctrl.Play()            
             
             # Get source and destination types
             source_type = self.source_path.split(".")[-1].upper()
@@ -199,6 +220,8 @@ class Panel(wx.Panel):
                 if os.path.isdir(temp_path):
                     for tempfile in os.listdir(temp_path):
                         os.remove(os.path.join(temp_path, tempfile))
+                
+                self.gif_ctrl.Stop()
 
 
 class Frame(wx.Frame):
