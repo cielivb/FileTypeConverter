@@ -132,10 +132,6 @@ class Panel(wx.Panel):
 
     def _convert_pdf(self, dest_type, filename):
         """ Convert each pdf page into a separate image """
-        # Create temp directory if not already present
-        if not os.path.isdir(os.path.join(os.path.dirname(__file__), 'temp')):
-            os.mkdir('temp')
-        
         images = convert_from_path(self.source_path) # List of Pillow images
         
         name = os.path.basename(filename)
@@ -145,23 +141,16 @@ class Panel(wx.Panel):
             # Add index to image filename
             pad_length = len(str(len(images)))
             padded_index = str(index).zfill(pad_length)
-            temp_filename = name + '_' + padded_index + '.PNG'
+            basename = name + '_' + padded_index + '.' + dest_type
             
-            temp_path = os.path.join(os.path.dirname(__file__), 
-                                     'temp', temp_filename)
-            image.save(temp_path, format='PNG', lossless=True)
-            self._convert(dest_type, filename, 
-                          temp_path=temp_path, 
-                          index=padded_index)
+            img_path = os.path.join(self.out_path, basename)
+            self._convert(dest_type, img_path, image)
 
 
-    def _convert(self, dest_type, filename, temp_path=None, index=None):
+    def _convert(self, dest_type, filename, image=None):
         """ Save copy of source file with user-specified extension """
-        if temp_path is None:
+        if image is None:
             image = PIL.Image.open(self.source_path)
-        else:
-            image = PIL.Image.open(temp_path)
-            filename = filename.split('.')[0] + '_' + index + '.' + dest_type
         
         # Use RGB for destination file types that do not support 
         # transparency, otherwise use RGBA.
@@ -211,16 +200,8 @@ class Panel(wx.Panel):
                 message = f'Failed to convert {source_type} to {dest_type}'
                 
             finally:
-                
                 # Show GUI success/fail message
                 self.GetParent()._show_status_message(message)
-                
-                # Clean up temp files
-                temp_path = os.path.join(os.path.dirname(__file__), 'temp')
-                if os.path.isdir(temp_path):
-                    for tempfile in os.listdir(temp_path):
-                        os.remove(os.path.join(temp_path, tempfile))
-                
                 self.gif_ctrl.Stop()
 
 
