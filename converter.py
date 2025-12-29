@@ -5,7 +5,6 @@ import PIL
 from pdf2image import convert_from_path
 import os
 import subprocess
-import traceback
 
 
 class Panel(wx.Panel):
@@ -188,18 +187,18 @@ class Panel(wx.Panel):
                 message = f'Converted {source_type} to {dest_type}'
                 
             except Exception:
-                traceback.print_exc()
                 message = f'Failed to convert {source_type} to {dest_type}'
+                
             finally:
+                
+                # Show GUI success/fail message
                 self.GetParent()._show_status_message(message)
+                
+                # Clean up temp files
                 temp_path = os.path.join(os.path.dirname(__file__), 'temp')
-                print(temp_path)
                 if os.path.isdir(temp_path):
-                    print('temp_path recognised as a directory')
                     for tempfile in os.listdir(temp_path):
-                        # NEED TO USE ABSOLUTE PATH HERE
-                        print(f'removing {tempfile}')
-                        os.remove(tempfile)
+                        os.remove(os.path.join(temp_path, tempfile))
 
 
 class Frame(wx.Frame):
